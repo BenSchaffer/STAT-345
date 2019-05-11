@@ -6,4 +6,15 @@ generate_data <- function(n,p){
 }
 
 chicken <- generate_data(2500,190)
-chicken
+
+
+model_select <- function(covariates, responses, cutoff){
+  linmod <- lm(responses ~ covariates)
+  keep <- summary(linmod)$coefficients[,4]
+  index <- which(keep<cutoff)
+  linmod.1 <- lm(responses ~ covariates[,index])
+  p <- summary(linmod.1)$coefficients[,4]
+  return(p)
+}
+
+values <- model_select(chicken$covarites, chicken$responses, 0.05)
